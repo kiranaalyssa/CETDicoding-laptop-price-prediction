@@ -33,7 +33,8 @@ Model ini juga termasuk ensemble, namun dibangun secara berurutan. Setiap model 
 
 ## Data Understanding
 Dataset yang digunakan: **Brand Laptops Dataset** dari Kaggle.  
-Sumber: Jikadara, B. (2024). *Brand Laptops Dataset*. Kaggle. Diakses dari [https://www.kaggle.com/datasets/bhavikjikadara/brand-laptops-dataset/data]
+Sumber: Jikadara, B. (2024). *Brand Laptops Dataset*. Kaggle. 
+Diakses dari [https://www.kaggle.com/datasets/bhavikjikadara/brand-laptops-dataset/data]
 
 Dataset Brand Laptops Dataset ini berisi 991 entri unik laptop. Dataset ini telah dibersihkan secara menyeluruh dan mencakup 22 fitur seperti nama laptop, harga dalam rupee India, prosesor, GPU, dan lain-lain. Dataset ini bersumber dari website ‘Smartprix’ dan diperbarui terakhir pada 14 Januari 2024 oleh author dataset tersebut.
 
