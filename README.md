@@ -39,7 +39,7 @@ Diakses dari [https://www.kaggle.com/datasets/bhavikjikadara/brand-laptops-datas
 Dataset Brand Laptops Dataset ini berisi 991 entri unik laptop. Dataset ini telah dibersihkan secara menyeluruh dan mencakup 22 fitur seperti nama laptop, harga dalam rupee India, prosesor, GPU, dan lain-lain. Dataset ini bersumber dari website ‘Smartprix’ dan diperbarui terakhir pada 14 Januari 2024 oleh author dataset tersebut.
 
 ## Data Cleaning
-1. Tahap ini bertujuan untuk memastikan dataset siap digunakan dalam analisis dan proses prediksi harga laptop. Langkah-langkah utama meliputi:
+Tahap ini bertujuan untuk memastikan dataset siap digunakan dalam analisis dan proses prediksi harga laptop. Langkah-langkah utama meliputi:
 * Standarisasi nama kolom:
 
 `df.columns = df.columns.str.lower()`
@@ -52,7 +52,7 @@ Semua nama kolom diubah menjadi huruf kecil agar penamaan konsisten dan lebih mu
 
 Kolom index dihapus karena tidak mengandung informasi terkait harga laptop maupun fitur teknis seperti RAM, brand, processor, atau storage.
 
-2. Handling missing value dan outlier:
+## Handling Missing Value dan Outlier
 Dataset ini tidak memiliki missing value, namun terdapat beberapa nilai ekstrem (outlier) pada fitur seperti harga, storage, RAM, dan spesifikasi hardware lainnya. Nilai ekstrem ini merupakan variasi alami dari laptop dengan spesifikasi berbeda, sehingga tetap penting untuk prediksi harga.
 
 Sebagai solusi, digunakan winsorization berbasis IQR (Interquartile Range), yaitu menyesuaikan nilai yang berada di bawah atau di atas batas IQR dengan nilai ambang batasnya. Pendekatan ini menjaga informasi penting dalam data, sekaligus mengurangi pengaruh outlier ekstrem terhadap model.
@@ -78,13 +78,9 @@ Tiga algoritma diuji: KNN, Random Forest, Gradient Boosting.
 * Mampu menggeneralisasi dengan baik tanpa overfitting berlebihan.
 
 ## Evaluation
-Metrik yang digunakan: Mean Squared Error (MSE)
+Metrik yang digunakan: Mean Squared Error (MSE). MSE mengukur rata-rata kuadrat kesalahan prediksi, memberi penalti besar pada outlier. Dalam pengadaan, prediksi yang terlalu meleset bisa menyebabkan kegagalan tender, sehingga MSE sangat relevan.
 
-MSE mengukur rata-rata kuadrat kesalahan prediksi, memberi penalti besar pada outlier.
-
-Dalam pengadaan, prediksi yang terlalu meleset bisa menyebabkan kegagalan tender, sehingga MSE sangat relevan.
-
-Kesimpulan:
+**Kesimpulan:**
 Random Forest unggul dengan Test MSE terendah, menunjukkan prediksi paling dekat dengan harga aktual. Model ini menjadi alat prediksi harga wajar yang andal untuk proses pengadaan.
 
 
