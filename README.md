@@ -3,7 +3,7 @@
 **Predictive Analysis untuk Pengadaan Laptop**
 Proyek ini berada dalam domain Predictive Analysis (analisis prediktif), yang berfokus pada kebutuhan strategis tim Pengadaan Barang dan Jasa. Tujuan utamanya adalah membangun model regresi yang mampu memprediksi harga wajar (Price) sebuah laptop berdasarkan spesifikasi teknisnya.
 
-## Latar Belakang dan Relevansi
+## Latar Belakang
 Menentukan harga wajar laptop dalam proses pengadaan sering menjadi tantangan, karena harga dipengaruhi oleh berbagai variabel spesifikasi, seperti brand, processor tier, kapasitas RAM, dan GPU.
 
 Proyek ini hadir sebagai solusi berbasis data untuk:
@@ -23,12 +23,13 @@ Masalah regresi ini diselesaikan dengan membandingkan tiga model Machine Learnin
 2. Menemukan model regresi terbaik (dengan MSE terendah) untuk dijadikan alat validasi harga pengadaan.
 
 ### Solution Statements
-Untuk mencapai goals, tiga model diuji dan dievaluasi menggunakan MSE:
-1. K-Nearest Neighbor (KNN): Model berbasis kemiripan data.
-2. Random Forest (RF): Model ensemble yang tangguh terhadap non-linearitas data.
-3. Gradient Boosting (Boosting): Model ensemble yang meningkatkan performa secara sekuensial.
-
-Model dengan MSE terkecil akan menjadi acuan harga prediksi.
+Untuk mencapai tujuan proyek, tiga model diuji dan dievaluasi menggunakan Mean Squared Error (MSE) sebagai ukuran kesalahan prediksi:
+* K-Nearest Neighbor (KNN)
+Model ini bekerja dengan mencari data yang paling mirip (tetangga terdekat) dengan data baru yang akan diprediksi. Prediksi harga laptop didasarkan pada harga laptop-laptop serupa di dataset.
+* Random Forest (RF)
+Random Forest adalah model ensemble yang menggabungkan banyak pohon keputusan. Model ini kuat dalam menangani data yang kompleks dan non-linear, sehingga dapat menangkap pola-pola yang sulit terlihat dengan model sederhana.
+* Gradient Boosting (Boosting)
+Model ini juga termasuk ensemble, namun dibangun secara berurutan. Setiap model berikutnya mencoba memperbaiki kesalahan dari model sebelumnya, sehingga hasil prediksinya cenderung lebih akurat.
 
 ## Data Understanding
 Dataset yang digunakan: **Brand Laptops Dataset** dari Kaggle.  
