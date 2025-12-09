@@ -36,11 +36,8 @@ Sumber: Jikadara, B. (2024). *Brand Laptops Dataset*. Kaggle. Diakses dari [http
 
 Dataset Brand Laptops Dataset ini berisi 991 entri unik laptop. Dataset ini telah dibersihkan secara menyeluruh dan mencakup 22 fitur seperti nama laptop, harga dalam rupee India, prosesor, GPU, dan lain-lain. Dataset ini bersumber dari website ‘Smartprix’ dan diperbarui terakhir pada 14 Januari 2024 oleh author dataset tersebut.
 
-## Data Preparation
-1. Data Cleaning
-
-Tahap ini bertujuan untuk memastikan dataset siap digunakan dalam analisis dan proses prediksi harga laptop. Langkah-langkah utama meliputi:
-
+## Data Cleaning
+1. Tahap ini bertujuan untuk memastikan dataset siap digunakan dalam analisis dan proses prediksi harga laptop. Langkah-langkah utama meliputi:
 * Standarisasi nama kolom:
 
 `df.columns = df.columns.str.lower()`
@@ -53,18 +50,19 @@ Semua nama kolom diubah menjadi huruf kecil agar penamaan konsisten dan lebih mu
 
 Kolom index dihapus karena tidak mengandung informasi terkait harga laptop maupun fitur teknis seperti RAM, brand, processor, atau storage.
 
-* Handling missing value dan outlier:
+2. Handling missing value dan outlier:
 Dataset ini tidak memiliki missing value, namun terdapat beberapa nilai ekstrem (outlier) pada fitur seperti harga, storage, RAM, dan spesifikasi hardware lainnya. Nilai ekstrem ini merupakan variasi alami dari laptop dengan spesifikasi berbeda, sehingga tetap penting untuk prediksi harga.
 
 Sebagai solusi, digunakan winsorization berbasis IQR (Interquartile Range), yaitu menyesuaikan nilai yang berada di bawah atau di atas batas IQR dengan nilai ambang batasnya. Pendekatan ini menjaga informasi penting dalam data, sekaligus mengurangi pengaruh outlier ekstrem terhadap model.
 
-2. Encoding
+## Data Preparation
+### Encoding
 Fitur kategorikal diubah menjadi nilai numerik agar dapat diproses oleh algoritma machine learning, yang hanya menerima input berupa angka. Teknik yang digunakan antara lain One-Hot Encoding untuk fitur seperti brand, processor_tier, dan gpu_type.
 
-3. Train–Test Split
+### Train–Test Split
 Dataset dibagi menjadi data latih dan data uji menggunakan rasio 80:20.
 
-4. Scaling
+### Scaling
 Fitur numerik distandarisasi menggunakan StandardScaler agar semua fitur memiliki skala yang sama.
 * Tujuan: mencegah fitur dengan rentang nilai besar (misal RAM atau storage) mendominasi proses pembelajaran model.
 * Manfaat: model menjadi lebih stabil dan prediksi lebih akurat.
