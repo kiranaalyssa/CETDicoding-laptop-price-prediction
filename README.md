@@ -32,11 +32,62 @@ Random Forest adalah model ensemble yang menggabungkan banyak pohon keputusan. M
 Model ini juga termasuk ensemble, namun dibangun secara berurutan. Setiap model berikutnya mencoba memperbaiki kesalahan dari model sebelumnya, sehingga hasil prediksinya cenderung lebih akurat.
 
 ## Data Understanding
-Dataset yang digunakan: **Brand Laptops Dataset** dari Kaggle.  
-Sumber: Jikadara, B. (2024). *Brand Laptops Dataset*. Kaggle. 
-Diakses dari [https://www.kaggle.com/datasets/bhavikjikadara/brand-laptops-dataset/data]
+Pada tahap Data Understanding, fokus utamanya adalah memahami struktur, isi, dan karakteristik dataset sebelum dilakukan proses persiapan data maupun pemodelan. Pengetahuan mendalam terkait data sangat penting agar setiap langkah berikutnya yaitu preprocessing dan modeling dapat dilakukan dengan tepat.
 
-Dataset Brand Laptops Dataset ini berisi 991 entri unik laptop. Dataset ini telah dibersihkan secara menyeluruh dan mencakup 22 fitur seperti nama laptop, harga dalam rupee India, prosesor, GPU, dan lain-lain. Dataset ini bersumber dari website ‘Smartprix’ dan diperbarui terakhir pada 14 Januari 2024 oleh author dataset tersebut.
+### Sumber Dataset
+Dataset diambil dari Kaggle dengan detail berikut:
+Jikadara, B. (2024). Brand Laptops Dataset. Kaggle.
+URL dataset: https://www.kaggle.com/datasets/bhavikjikadara/brand-laptops-dataset/data
+
+Dataset ini merupakan hasil scraping dan pengumpulan data laptop dari marketplace Smartprix, yang diperbarui terakhir pada 14 Januari 2024. Dataset ini berisi informasi mengenai harga dan spesifikasi berbagai merek laptop yang tersedia di pasaran, sehingga cocok digunakan sebagai bahan analisis dalam proyek ini.
+
+### Jumlah Baris dan Kolom Dataset
+Berdasarkan eksplorasi awal menggunakan notebook:
+* Jumlah baris (entries): 991
+* Jumlah kolom (fitur): 22
+  
+Jumlah baris tersebut sudah cukup mewakili variasi laptop di pasaran, mencakup perbedaan merek, rentang harga, dan spesifikasi teknis. Sementara itu, jumlah fitur yang tersedia juga memadai untuk menggambarkan faktor-faktor yang memengaruhi harga laptop tanpa menambah kompleksitas analisis secara berlebihan.
+
+### Kondisi Dataset
+Mengevaluasi kondisi data merupakan bagian penting agar kita memahami apa saja yang perlu ditangani pada tahap Data Preparation. Berikut ringkasannya:
+
+1. Missing Values
+Berdasarkan pemeriksaan menggunakan df.isnull().sum(), dataset tidak memiliki missing value.
+Ini memudahkan proses preprocessing karena tidak diperlukan imputasi atau penghapusan baris berdasarkan missing data.
+
+2. Inkonsistensi Format
+Nama kolom pada dataset awal memiliki inkonsistensi dalam penulisan, seperti penggunaan huruf kapital dan format penamaan yang tidak seragam. Untuk menghindari potensi kesalahan saat pemanggilan kolom dan memastikan konsistensi pada proses analisis, seluruh nama kolom kemudian distandarisasi menjadi huruf kecil menggunakan fungsi .lower().
+
+3. Outlier
+Outlier terdeteksi pada beberapa fitur numerik, terutama:
+* Price → wajar karena terdapat laptop flagship yang sangat mahal.
+* RAM dan Storage → variasi kapasitas laptop memang besar.
+Outlier tidak selalu salah. Pada konteks produk laptop, outlier sering mencerminkan kategori produk yang berbeda. Namun, beberapa outlier ekstrem perlu dikendalikan agar tidak mendistorsi model.
+
+### Uraian Seluruh Fitur Dataset
+| **Fitur**                     | **Penjelasan (Bahasa Indonesia)**                                               |
+|------------------------------|----------------------------------------------------------------------------------|
+| Brand                        | Nama merek laptop.                                                               |
+| Model                        | Seri atau model spesifik dari laptop.                                            |
+| Price                        | Harga laptop dalam mata uang Rupee India.                                        |
+| Rating                       | Penilaian atau rating berdasarkan spesifikasi atau performa laptop.              |
+| Processor brand              | Merek prosesor yang digunakan pada laptop.                                       |
+| Processor tier               | Kategori atau tingkat performa dari prosesor.                                    |
+| Number of Cores              | Jumlah inti pemrosesan pada prosesor.                                            |
+| Number of Threads            | Jumlah thread yang dapat diproses oleh prosesor.                                 |
+| Ram memory                   | Besaran kapasitas RAM pada laptop.                                               |
+| Primary storage type         | Jenis penyimpanan utama (misalnya HDD atau SSD).                                 |
+| Primary storage capacity     | Kapasitas penyimpanan utama.                                                     |
+| Secondary storage type       | Jenis penyimpanan tambahan apabila tersedia.                                     |
+| Secondary storage capacity   | Kapasitas penyimpanan tambahan.                                                  |
+| GPU brand                    | Merek kartu grafis (GPU) yang digunakan.                                         |
+| GPU type                     | Jenis atau tipe GPU yang terpasang.                                              |
+| Is Touch screen              | Menunjukkan apakah laptop memiliki fitur layar sentuh.                           |
+| Display size                 | Ukuran layar laptop dalam inci.                                                  |
+| Resolution width             | Resolusi lebar layar.                                                            |
+| Resolution height            | Resolusi tinggi layar.                                                           |
+| OS                           | Sistem operasi yang terpasang pada laptop.                                       |
+| Year of warranty             | Lama garansi yang diberikan, umumnya dalam tahun.                                |
 
 ## Data Cleaning
 Tahap ini bertujuan untuk memastikan dataset siap digunakan dalam analisis dan proses prediksi harga laptop. Langkah-langkah utama meliputi:
