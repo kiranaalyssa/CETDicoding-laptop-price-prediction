@@ -50,7 +50,6 @@ Jumlah baris tersebut sudah cukup mewakili variasi laptop di pasaran, mencakup p
 
 ### Kondisi Dataset
 Mengevaluasi kondisi data merupakan bagian penting agar kita memahami apa saja yang perlu ditangani pada tahap Data Preparation. Berikut ringkasannya:
-
 1. Missing Values
 Berdasarkan pemeriksaan menggunakan df.isnull().sum(), dataset tidak memiliki missing value.
 Ini memudahkan proses preprocessing karena tidak diperlukan imputasi atau penghapusan baris berdasarkan missing data.
@@ -89,38 +88,30 @@ Outlier tidak selalu salah. Pada konteks produk laptop, outlier sering mencermin
 | OS                           | Sistem operasi yang terpasang pada laptop.                                       |
 | Year of warranty             | Lama garansi yang diberikan, umumnya dalam tahun.                                |
 
-## Data Cleaning
-Tahap ini bertujuan untuk memastikan dataset siap digunakan dalam analisis dan proses prediksi harga laptop. Langkah-langkah utama meliputi:
-* Standarisasi nama kolom:
-
-`df.columns = df.columns.str.lower()`
-
-Semua nama kolom diubah menjadi huruf kecil agar penamaan konsisten dan lebih mudah diakses saat eksplorasi, visualisasi, dan preprocessing.
-
-* Menghapus kolom tidak relevan:
-
-`df = df.drop(columns=['index'])`
-
-Kolom index dihapus karena tidak mengandung informasi terkait harga laptop maupun fitur teknis seperti RAM, brand, processor, atau storage.
-
-## Handling Missing Value dan Outlier
-Dataset ini tidak memiliki missing value, namun terdapat beberapa nilai ekstrem (outlier) pada fitur seperti harga, storage, RAM, dan spesifikasi hardware lainnya. Nilai ekstrem ini merupakan variasi alami dari laptop dengan spesifikasi berbeda, sehingga tetap penting untuk prediksi harga.
-
-Sebagai solusi, digunakan winsorization berbasis IQR (Interquartile Range), yaitu menyesuaikan nilai yang berada di bawah atau di atas batas IQR dengan nilai ambang batasnya. Pendekatan ini menjaga informasi penting dalam data, sekaligus mengurangi pengaruh outlier ekstrem terhadap model.
-
 ## Data Preparation
+
+### Handling Missing Values
+Karena dataset tidak memiliki missing value, tidak diperlukan teknik imputasi. Semua baris dapat dipertahankan.
+
+## Handling Outlier
+Terdapat beberapa nilai ekstrem (outlier) pada fitur seperti harga, storage, RAM, dan spesifikasi hardware lainnya. Nilai ekstrem ini merupakan variasi alami dari laptop dengan spesifikasi berbeda, sehingga tetap penting untuk prediksi harga.
+
+Sebagai solusi, digunakan winsorization berbasis **IQR (Interquartile Range)**, yaitu menyesuaikan nilai yang berada di bawah atau di atas batas IQR dengan nilai ambang batasnya. Pendekatan ini menjaga informasi penting dalam data, sekaligus mengurangi pengaruh outlier ekstrem terhadap model.
+
 ### Encoding
-Fitur kategorikal diubah menjadi nilai numerik agar dapat diproses oleh algoritma machine learning, yang hanya menerima input berupa angka. Teknik yang digunakan antara lain One-Hot Encoding untuk fitur seperti brand, processor_tier, dan gpu_type.
+Fitur kategorikal diubah menjadi nilai numerik agar dapat diproses oleh algoritma machine learning, yang hanya menerima input berupa angka. Teknik yang digunakan antara lain One-Hot Encoding untuk fitur seperti brand, is_touch_screen, gpu_type, dan lainnya.
 
 ### Train–Test Split
-Dataset dibagi menjadi data latih dan data uji menggunakan rasio 80:20.
+Dataset ini dibagi menjadi data latih dan data uji menggunakan rasio 80:20. Dengan total 991 entri, pembagian tersebut menghasilkan kurang lebih 792 data untuk pelatihan (training set) dan 199 data untuk pengujian (test set).
+
+Rasio 80:20 dipilih karena merupakan standar yang umum digunakan dalam proyek machine learning untuk dataset berukuran menengah. Proporsi 80% memberikan jumlah data yang cukup besar bagi model untuk mempelajari pola dan hubungan antarfitur secara optimal, sementara 20% sisanya tetap menyediakan porsi data yang memadai untuk menilai performa model secara objektif pada data yang tidak dilibatkan dalam proses pelatihan.
 
 ### Scaling
 Fitur numerik distandarisasi menggunakan StandardScaler agar semua fitur memiliki skala yang sama.
-* Tujuan: mencegah fitur dengan rentang nilai besar (misal RAM atau storage) mendominasi proses pembelajaran model.
+* Tujuan: mencegah fitur dengan rentang nilai besar (misal RAM atau Storage) mendominasi proses pembelajaran model.
 * Manfaat: model menjadi lebih stabil dan prediksi lebih akurat.
 
-## Modeling
+## Model Development
 Tiga algoritma diuji: KNN, Random Forest, Gradient Boosting.
 
 **Pemilihan Model Terbaik**
