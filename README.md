@@ -195,20 +195,20 @@ Hasil evaluasi model berdasarkan nilai Mean Squared Error (MSE) ditunjukkan pada
 | Boosting    | 226245.065429        | 235836.559536        |
 
 ### Interpretasi Hasil MSE
-1. KNN
-* MSE train: 229.552
-* MSE test: 210.297
+1. K-Nearest Neighbors (KNN)
+* MSE train: 229552.334894	
+* MSE test: 210297.871642
 Selisih train–test tidak terlalu besar, menandakan model relatif stabil.
 Namun, nilai MSE yang tinggi menunjukkan bahwa akurasi model kurang baik, kemungkinan karena KNN sensitif terhadap skala data dan tidak mampu menangkap pola kompleks dalam dataset laptop.
 
 2. Random Forest (RF)
-* MSE train jauh lebih rendah (32.035), menunjukkan model mampu mempelajari pola dengan baik.
-* MSE test (132.791) juga relatif lebih rendah dibanding model lain.
+* MSE train jauh lebih rendah (32035.624644), menunjukkan model mampu mempelajari pola dengan baik.
+* MSE test (132791.787976) juga relatif lebih rendah dibanding model lain.
 Meskipun terdapat gap antara train dan test, nilainya masih dalam batas wajar untuk algoritma ensemble yang memang cenderung fit lebih baik pada data latih.
 Secara keseluruhan, model ini memberikan performa terbaik di antara ketiganya.
 
 3. AdaBoost (Boosting)
-* MSE train (226.245) dan test (235.836) cukup tinggi, menandakan model tidak optimal dalam belajar pola pada data.
+* MSE train (226245.065429) dan test (235836.559536) cukup tinggi, menandakan model tidak optimal dalam belajar pola pada data.
 * Gap kecil antara train dan test menunjukkan model tidak overfitting, namun hasilnya tetap kurang akurat.
 AdaBoost cenderung kurang kuat pada dataset tanpa noise rendah atau tanpa tuning parameter lebih lanjut.
 
