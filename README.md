@@ -147,16 +147,20 @@ Random Forest adalah algoritma ensemble berbasis bagging yang menggabungkan bany
 
   Penjelasan parameter:
   * n_estimators = 50
-  Jumlah pohon dalam hutan. Semakin banyak pohon, semakin stabil hasilnya. Dalam kasus ini digunakan 50 pohon—cukup untuk mendapatkan hasil yang baik tanpa waktu komputasi yang terlalu    besar.
+  
+  Jumlah pohon dalam hutan. Semakin banyak pohon, semakin stabil hasilnya. Dalam kasus ini digunakan 50 pohon, cukup untuk mendapatkan hasil yang baik tanpa waktu komputasi yang terlalu    besar.
 
   * max_depth = 16
+  
   Parameter ini membatasi kedalaman maksimum setiap decision tree dalam Random Forest. Pembatasan ini membantu model agar tidak terlalu kompleks dan tidak terlalu menyesuaikan diri
   dengan data latih, sehingga risiko overfitting dapat dikurangi.
 
   * random_state = 55
+  
   Nilai random_state = 55 dipilih sebagai seed acak untuk mengontrol proses randomisasi pada Random Forest. Digunakan agar seluruh proses pelatihan model (seperti pemilihan sampel dan     fitur) dapat menghasilkan hasil yang sama setiap kali kode dijalankan.
 
   * n_jobs = -1
+  
   Digunakan agar proses pelatihan Random Forest memanfaatkan seluruh core CPU, sehingga waktu training menjadi lebih cepat dan efisien.
 
 ### Model 3 - AdaBoost Regressor (Boosting)
@@ -175,9 +179,11 @@ Karena sifatnya sekuensial, boosting sangat baik dalam meningkatkan akurasi, tet
 
   Penjelasan Parameter:
   * learning_rate = 0.05
+  
   Mengatur kontribusi setiap weak learner (pohon kecil) terhadap model akhir. Nilai rendah (0.05) membuat setiap model memberi kontribusi kecil sehingga proses boosting lebih halus dan    mengurangi risiko overfitting.
 
   * random_state = 55
+  
   Digunakan untuk mengontrol proses randomisasi pada AdaBoost agar hasil pelatihan model tetap konsisten dan dapat diulang dengan hasil yang sama setiap kali kode dijalankan.
 
 ## **Evaluation**
