@@ -7,29 +7,31 @@ Proyek ini berada dalam domain Predictive Analysis (analisis prediktif), yang be
 Menentukan harga wajar laptop dalam proses pengadaan sering menjadi tantangan, karena harga dipengaruhi oleh berbagai variabel spesifikasi, seperti brand, processor tier, kapasitas RAM, dan GPU.
 
 Proyek ini hadir sebagai solusi berbasis data untuk:
-* Efisiensi Anggaran: Menetapkan benchmark harga wajar agar anggaran pengadaan tidak overbudget atau underbudget.
+* Efisiensi Anggaran: Menetapkan benchmark harga wajar agar anggaran pengadaan tidak *overbudget* atau *underbudget*.
 * Negosiasi: Memberikan landasan data yang kuat saat bernegosiasi dengan vendor.
-* Strategi Pengadaan: Mengidentifikasi fitur yang paling signifikan memengaruhi harga untuk memilih spesifikasi laptop yang cost-effective.
+* Strategi Pengadaan: Mengidentifikasi fitur yang paling signifikan memengaruhi harga untuk memilih spesifikasi laptop yang *cost-effective*.
 
-Masalah regresi ini diselesaikan dengan membandingkan tiga model Machine Learning: KNN, Random Forest, dan Gradient Boosting, untuk menemukan model dengan Mean Squared Error (MSE) terendah.
+Masalah regresi ini diselesaikan dengan membandingkan tiga model Machine Learning: KNN, Random Forest, dan Boosting, untuk menemukan model dengan Mean Squared Error (MSE) terendah.
 
 ## **Business Understanding**
 ### Problem Statements
 1. Bagaimana cara mengidentifikasi faktor spesifikasi teknis (prosesor, RAM, penyimpanan, GPU) yang paling signifikan memengaruhi harga laptop?
 2. Bagaimana membangun model prediktif yang akurat untuk estimasi harga wajar laptop sebagai alat bantu dalam proses pengadaan?
+3. Bagaimana performa model dalam memprediksi harga laptop pada data yang belum pernah digunakan saat pelatihan?
 
 ### Goals
 1. Memahami korelasi antara spesifikasi teknis laptop dan harga jualnya.
 2. Menemukan model regresi terbaik (dengan MSE terendah) untuk dijadikan alat validasi harga pengadaan.
+3. Mengevaluasi kemampuan generalisasi model menggunakan data uji untuk memastikan hasil prediksi tetap stabil dan dapat digunakan secara praktis.
 
 ### Solution Statements
 Untuk mencapai tujuan proyek, tiga model diuji dan dievaluasi menggunakan Mean Squared Error (MSE) sebagai ukuran kesalahan prediksi:
 * K-Nearest Neighbor (KNN)
 Model ini bekerja dengan mencari data yang paling mirip (tetangga terdekat) dengan data baru yang akan diprediksi. Prediksi harga laptop didasarkan pada harga laptop-laptop serupa di dataset.
 * Random Forest (RF)
-Random Forest adalah model ensemble yang menggabungkan banyak pohon keputusan. Model ini kuat dalam menangani data yang kompleks dan non-linear, sehingga dapat menangkap pola-pola yang sulit terlihat dengan model sederhana.
-* Gradient Boosting (Boosting)
-Model ini juga termasuk ensemble, namun dibangun secara berurutan. Setiap model berikutnya mencoba memperbaiki kesalahan dari model sebelumnya, sehingga hasil prediksinya cenderung lebih akurat.
+Random Forest adalah model *ensemble* yang menggabungkan banyak pohon keputusan. Model ini kuat dalam menangani data yang kompleks dan *non-linear*, sehingga dapat menangkap pola-pola yang sulit terlihat dengan model sederhana.
+* AdaBoostRegressor (Boosting)
+AdaBoostRegressor merupakan metode *ensemble* berbasis *boosting* yang dilatih secara berurutan, di mana setiap model selanjutnya fokus memperbaiki kesalahan prediksi pada tahap sebelumnya sehingga akurasi meningkat.
 
 ## **Data Understanding**
 Pada tahap Data Understanding, fokus utamanya adalah memahami struktur, isi, dan karakteristik dataset sebelum dilakukan proses persiapan data maupun pemodelan. Pengetahuan mendalam terkait data sangat penting agar setiap langkah berikutnya yaitu preprocessing dan modeling dapat dilakukan dengan tepat.
@@ -50,18 +52,14 @@ Jumlah baris tersebut sudah cukup mewakili variasi laptop di pasaran, mencakup p
 
 ### Kondisi Dataset
 Mengevaluasi kondisi data merupakan bagian penting agar kita memahami apa saja yang perlu ditangani pada tahap Data Preparation. Berikut ringkasannya:
-1. Missing Values
-Berdasarkan pemeriksaan menggunakan df.isnull().sum(), dataset tidak memiliki missing value.
-Ini memudahkan proses preprocessing karena tidak diperlukan imputasi atau penghapusan baris berdasarkan missing data.
+1. Inkonsistensi Penulisan dan Data Tidak Relevan
+Dataset memiliki inkonsistensi dalam penulisan nama kolom, seperti perbedaan penggunaan huruf kapital dan format penamaan yang tidak seragam. Selain itu, terdapat kolom indeks yang hanya berisi penomoran dan tidak memiliki makna informatif terhadap analisis maupun pemodelan.
 
-2. Inkonsistensi Format
-Nama kolom pada dataset awal memiliki inkonsistensi dalam penulisan, seperti penggunaan huruf kapital dan format penamaan yang tidak seragam. Untuk menghindari potensi kesalahan saat pemanggilan kolom dan memastikan konsistensi pada proses analisis, seluruh nama kolom kemudian distandarisasi menjadi huruf kecil menggunakan fungsi .lower().
+2. Missing Values
+Hasil pemeriksaan menunjukkan bahwa dataset tidak memiliki missing value pada seluruh kolom. Kondisi ini menunjukkan bahwa data relatif lengkap dan tidak mengalami kehilangan informasi pada setiap fitur.
 
 3. Outlier
-Outlier terdeteksi pada beberapa fitur numerik, terutama:
-* Price → wajar karena terdapat laptop flagship yang sangat mahal.
-* RAM dan Storage → variasi kapasitas laptop memang besar.
-Outlier tidak selalu salah. Pada konteks produk laptop, outlier sering mencerminkan kategori produk yang berbeda. Namun, beberapa outlier ekstrem perlu dikendalikan agar tidak mendistorsi model.
+Dataset mengandung outlier pada beberapa fitur numerik, terutama pada variabel harga, RAM, dan kapasitas penyimpanan. Keberadaan outlier ini mencerminkan variasi spesifikasi laptop yang luas, mulai dari kelas entry-level hingga laptop dengan spesifikasi tinggi. Meskipun sebagian outlier bersifat wajar, nilai ekstrem berpotensi memengaruhi performa model jika tidak dikendalikan.
 
 ### Uraian Seluruh Fitur Dataset
 | **Fitur**                     | **Penjelasan (Bahasa Indonesia)**                                               |
@@ -90,8 +88,11 @@ Outlier tidak selalu salah. Pada konteks produk laptop, outlier sering mencermin
 
 ## **Data Preparation**
 
+### Inkonsistensi Penulisan dan Data Tidak Relevan
+Nama kolom pada dataset awal memiliki inkonsistensi dalam penulisan, seperti penggunaan huruf kapital. Untuk menghindari kesalahan saat pemanggilan kolom dan menjaga konsistensi selama proses analisis, seluruh nama kolom diubah menjadi huruf kecil menggunakan fungsi .lower(). Selain itu, data yang tidak relevan berupa kolom indeks yang hanya berisi penomoran juga dihapus karena tidak memberikan informasi yang berguna dalam proses analisis maupun pemodelan.
+
 ### Handling Missing Values
-Karena dataset tidak memiliki missing value, tidak diperlukan teknik imputasi. Semua baris dapat dipertahankan.
+Berdasarkan pemeriksaan menggunakan df.isnull().sum(), dataset tidak memiliki missing value. Ini memudahkan proses preprocessing karena tidak diperlukan imputasi atau penghapusan baris berdasarkan missing data.
 
 ### Handling Outlier
 Terdapat beberapa nilai ekstrem (outlier) pada fitur seperti harga, storage, RAM, dan spesifikasi hardware lainnya. Nilai ekstrem ini merupakan variasi alami dari laptop dengan spesifikasi berbeda, sehingga tetap penting untuk prediksi harga.
@@ -99,7 +100,7 @@ Terdapat beberapa nilai ekstrem (outlier) pada fitur seperti harga, storage, RAM
 Sebagai solusi, digunakan winsorization berbasis **IQR (Interquartile Range)**, yaitu menyesuaikan nilai yang berada di bawah atau di atas batas IQR dengan nilai ambang batasnya. Pendekatan ini menjaga informasi penting dalam data, sekaligus mengurangi pengaruh outlier ekstrem terhadap model.
 
 ### Encoding
-Fitur kategorikal diubah menjadi nilai numerik agar dapat diproses oleh algoritma machine learning, yang hanya menerima input berupa angka. Teknik yang digunakan antara lain One-Hot Encoding untuk fitur seperti brand, is_touch_screen, gpu_type, dan lainnya.
+Fitur kategorikal diubah menjadi nilai numerik agar dapat diproses oleh algoritma machine learning, yang hanya menerima input berupa angka. Teknik yang digunakan antara lain *One-Hot Encoding* untuk fitur seperti brand, is_touch_screen, gpu_type, dan lainnya.
 
 ### Train–Test Split
 Dataset ini dibagi menjadi data latih dan data uji menggunakan rasio 80:20. Dengan total 991 entri, pembagian tersebut menghasilkan kurang lebih 792 data untuk pelatihan (training set) dan 199 data untuk pengujian (test set).
@@ -108,87 +109,83 @@ Rasio 80:20 dipilih karena merupakan standar yang umum digunakan dalam proyek ma
 
 ### Scaling
 Fitur numerik distandarisasi menggunakan StandardScaler agar semua fitur memiliki skala yang sama.
-* Tujuan: mencegah fitur dengan rentang nilai besar (misal RAM atau Storage) mendominasi proses pembelajaran model.
-* Manfaat: model menjadi lebih stabil dan prediksi lebih akurat.
+* Tujuan: Mencegah fitur dengan rentang nilai besar (misal RAM atau Storage) mendominasi proses pembelajaran model.
+* Manfaat: Model menjadi lebih stabil dan prediksi lebih akurat.
 
 ## **Model Development**
 ### Model 1 – K-Nearest Neighbors (KNN) Regressor
 K-Nearest Neighbors (KNN) adalah algoritma berbasis instance-based learning atau lazy learner. Artinya, model tidak membangun fungsi atau aturan khusus saat pelatihan, tetapi menyimpan seluruh data latih dan baru melakukan perhitungan ketika diminta melakukan prediksi.
 
 * Proses kerja KNN dalam regresi adalah sebagai berikut:
-1. Ketika model menerima satu data baru yang ingin diprediksi, ia akan menghitung jarak antara data tersebut dengan seluruh data latih.
-2. Jarak yang digunakan biasanya Euclidean Distance (karena p=2, default).
-3. Setelah semua jarak dihitung, model memilih k tetangga terdekat sesuai nilai n_neighbors.
-4. Nilai target (harga laptop) diprediksi dengan menghitung rata-rata dari nilai target milik tetangga-tetangga terdekat tersebut.
-5. Semakin kecil jaraknya, semakin besar pengaruh datapoint tersebut terhadap prediksi.
-Karena KNN melihat kedekatan data (mirip atau tidak mirip), scaling data sangat penting agar fitur dengan rentang besar tidak mendominasi jarak.
+  1. Ketika model menerima satu data baru yang ingin diprediksi, ia akan menghitung jarak antara data tersebut dengan seluruh data latih.
+  2. Jarak yang digunakan biasanya Euclidean Distance (karena p=2, default).
+  3. Setelah semua jarak dihitung, model memilih k tetangga terdekat sesuai nilai n_neighbors.
+  4. Nilai target (harga laptop) diprediksi dengan menghitung rata-rata dari nilai target milik tetangga-tetangga terdekat tersebut.
+  5. Semakin kecil jaraknya, semakin besar pengaruh datapoint tersebut terhadap prediksi.
+  Karena KNN melihat kedekatan data (mirip atau tidak mirip), scaling data sangat penting agar fitur dengan rentang besar tidak mendominasi jarak.
 
 * Parameter Model
-`knn = KNeighborsRegressor(n_neighbors=10)`
-Penjelasan parameter:
+  `knn = KNeighborsRegressor(n_neighbors=10)`
 
-n_neighbors = 10
-Menentukan jumlah tetangga terdekat yang digunakan untuk melakukan prediksi.
-Dengan nilai 10, prediksi dilakukan dengan menghitung rata-rata harga dari 10 laptop yang paling mirip.
-Nilai k yang lebih besar membuat model lebih halus (less variance), tetapi terlalu besar dapat mengaburkan pola lokal.
+  Penjelasan parameter:
+  **n_neighbors = 10**
+  Menentukan jumlah tetangga terdekat yang digunakan untuk melakukan prediksi. Dengan nilai 10, prediksi dilakukan dengan menghitung rata-rata harga dari 10 laptop yang paling mirip.
+  Nilai k yang lebih besar membuat model lebih halus (less variance), tetapi terlalu besar dapat mengaburkan pola lokal.
 
 ### Model 2 - Random Forest Regressor
 Random Forest adalah algoritma ensemble berbasis bagging yang menggabungkan banyak Decision Tree untuk menghasilkan prediksi yang lebih stabil dan akurat. 
 
 * Proses kerja RF dalam regresi adalah sebagai berikut:
-1. Model membangun banyak pohon keputusan (Decision Trees).
-2. Setiap pohon dilatih pada subset data yang berbeda yang diambil secara acak (bootstrap sampling).
-3. Selain bootstrap, setiap pohon juga menggunakan subset fitur acak saat membangun setiap node.
-4. Pada saat prediksi, masing-masing pohon memberikan prediksinya, kemudian hasil akhirnya adalah rata-rata prediksi seluruh pohon (untuk regresi).
-5. Proses ini membuat Random Forest tahan terhadap overfitting, lebih stabil, dan mampu menangkap pola non-linear.
+  1. Model membangun banyak pohon keputusan (Decision Trees).
+  2. Setiap pohon dilatih pada subset data yang berbeda yang diambil secara acak (bootstrap sampling).
+  3. Selain bootstrap, setiap pohon juga menggunakan subset fitur acak saat membangun setiap node.
+  4. Pada saat prediksi, masing-masing pohon memberikan prediksinya, kemudian hasil akhirnya adalah rata-rata prediksi seluruh pohon (untuk regresi).
+  5. Proses ini membuat Random Forest tahan terhadap overfitting, lebih stabil, dan mampu menangkap pola non-linear.
 
 * Parameter Model
-`RF = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1)`
+  `RF = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1)`
 
-Penjelasan parameter:
-1. n_estimators = 50
-Jumlah pohon dalam hutan. Semakin banyak pohon, semakin stabil hasilnya.
-Dalam kasus ini digunakan 50 pohon—cukup untuk mendapatkan hasil yang baik tanpa waktu komputasi yang terlalu besar.
+  Penjelasan parameter:
+  1. n_estimators = 50
+  Jumlah pohon dalam hutan. Semakin banyak pohon, semakin stabil hasilnya. Dalam kasus ini digunakan 50 pohon—cukup untuk mendapatkan hasil yang baik tanpa waktu komputasi yang terlalu    besar.
 
-2. max_depth = 16
-Batas kedalaman maksimal setiap pohon.
-Batas ini mencegah pohon tumbuh terlalu dalam sehingga mengurangi risiko overfitting.
+  2. max_depth = 16
+  Parameter ini membatasi kedalaman maksimum setiap decision tree dalam Random Forest. Pembatasan ini membantu model agar tidak terlalu kompleks dan tidak terlalu menyesuaikan diri
+  dengan data latih, sehingga risiko overfitting dapat dikurangi.
 
-3. random_state = 55
-Memberikan hasil yang konsisten pada setiap running.
+  3. random_state = 55
+  Nilai random_state = 55 dipilih sebagai seed acak untuk mengontrol proses randomisasi pada Random Forest. Digunakan agar seluruh proses pelatihan model (seperti pemilihan sampel dan     fitur) dapat menghasilkan hasil yang sama setiap kali kode dijalankan.
 
-4. n_jobs = -1
-Menginstruksikan model untuk menggunakan seluruh core CPU agar proses training lebih cepat.
+  4. n_jobs = -1
+  Digunakan agar proses pelatihan Random Forest memanfaatkan seluruh core CPU, sehingga waktu training menjadi lebih cepat dan efisien.
 
 ### Model 3 - AdaBoost Regressor (Boosting)
 AdaBoost (Adaptive Boosting) adalah algoritma boosting yang bekerja secara sekuensial, di mana setiap model baru dibuat untuk memperbaiki kesalahan dari model sebelumnya.
 
 * Proses kerja RF dalam regresi adalah sebagai berikut:
-1. Model pertama (weak learner) dilatih menggunakan seluruh data.
-2. Setelah model pertama selesai, datapoint yang diprediksi salah akan diberikan bobot lebih besar, sehingga model berikutnya fokus memperbaiki kesalahan tersebut.
-3. Model kedua dilatih dengan mempertimbangkan bobot baru tersebut.
-4. Proses ini terus diulang untuk sejumlah iterasi (sesuai default atau parameter).
-5. Prediksi akhir merupakan kombinasi berbobot dari seluruh weak learners yang dibangun.
-Karena sifatnya sekuensial, boosting sangat baik dalam meningkatkan akurasi, tetapi lebih sensitif terhadap noise.
+  1. Model pertama (weak learner) dilatih menggunakan seluruh data.
+  2. Setelah model pertama selesai, datapoint yang diprediksi salah akan diberikan bobot lebih besar, sehingga model berikutnya fokus memperbaiki kesalahan tersebut.
+  3. Model kedua dilatih dengan mempertimbangkan bobot baru tersebut.
+  4. Proses ini terus diulang untuk sejumlah iterasi (sesuai default atau parameter).
+  5. Prediksi akhir merupakan kombinasi berbobot dari seluruh weak learners yang dibangun.
+  Karena sifatnya sekuensial, boosting sangat baik dalam meningkatkan akurasi, tetapi lebih sensitif terhadap noise.
 
 * Parameter Model
-`boosting = AdaBoostRegressor(learning_rate=0.05, random_state=55)`
+  `boosting = AdaBoostRegressor(learning_rate=0.05, random_state=55)`
 
-Penjelasan Parameter
+  Penjelasan Parameter:
+  1. learning_rate = 0.05
+  Mengatur kontribusi setiap weak learner (pohon kecil) terhadap model akhir. Nilai rendah (0.05) membuat setiap model memberi kontribusi kecil sehingga proses boosting lebih halus dan    mengurangi risiko overfitting.
 
-1. learning_rate = 0.05
-Mengatur kontribusi setiap weak learner (pohon kecil) terhadap model akhir.
-Nilai rendah (0.05) membuat setiap model memberi kontribusi kecil sehingga proses boosting lebih halus dan mengurangi risiko overfitting.
-
-2. random_state = 55
-Untuk konsistensi hasil.
+  2. random_state = 55
+  Digunakan untuk mengontrol proses randomisasi pada AdaBoost agar hasil pelatihan model tetap konsisten dan dapat diulang dengan hasil yang sama setiap kali kode dijalankan.
 
 ## **Evaluation**
-Metrik yang digunakan: Mean Squared Error (MSE). MSE mengukur rata-rata kuadrat kesalahan prediksi, memberi penalti besar pada outlier. Dalam pengadaan, prediksi yang terlalu meleset bisa menyebabkan kegagalan tender, sehingga MSE sangat relevan.
+Metrik evaluasi yang digunakan dalam penelitian ini adalah Mean Squared Error (MSE). MSE mengukur rata-rata kuadrat selisih antara nilai aktual dan nilai prediksi, sehingga kesalahan dengan selisih yang besar akan memberikan dampak yang lebih signifikan terhadap nilai evaluasi. Oleh karena itu, MSE bersifat sensitif terhadap prediksi yang meleset jauh dari nilai sebenarnya. Nilai MSE yang semakin kecil menunjukkan bahwa prediksi model semakin mendekati nilai aktual, sehingga kinerja model dapat dikatakan semakin baik.
 
 ### Hasil MSE terhadap Algoritma
 Hasil evaluasi model berdasarkan nilai Mean Squared Error (MSE) ditunjukkan pada tabel berikut:
-| **Model**   | **Train MSE**       | **Test MSE**        |
+| **Model**   | **Train MSE**        | **Test MSE**         |
 |-------------|----------------------|----------------------|
 | KNN         | 229552.334894        | 210297.871642        |
 | RF          | 32035.624644         | 132791.787976        |
@@ -196,24 +193,22 @@ Hasil evaluasi model berdasarkan nilai Mean Squared Error (MSE) ditunjukkan pada
 
 ### Interpretasi Hasil MSE
 1. K-Nearest Neighbors (KNN)
-* MSE train: 229552.334894	
-* MSE test: 210297.871642
-Selisih train–test tidak terlalu besar, menandakan model relatif stabil.
-Namun, nilai MSE yang tinggi menunjukkan bahwa akurasi model kurang baik, kemungkinan karena KNN sensitif terhadap skala data dan tidak mampu menangkap pola kompleks dalam dataset laptop.
+  * MSE train: 229552.334894	
+  * MSE test: 210297.871642
+  Selisih train–test tidak terlalu besar, menandakan model relatif stabil. Namun, nilai MSE yang tinggi menunjukkan bahwa akurasi model kurang baik, kemungkinan karena KNN sensitif        terhadap skala data dan tidak mampu menangkap pola kompleks dalam dataset laptop.
 
 2. Random Forest (RF)
-* MSE train jauh lebih rendah (32035.624644), menunjukkan model mampu mempelajari pola dengan baik.
-* MSE test (132791.787976) juga relatif lebih rendah dibanding model lain.
-Meskipun terdapat gap antara train dan test, nilainya masih dalam batas wajar untuk algoritma ensemble yang memang cenderung fit lebih baik pada data latih.
-Secara keseluruhan, model ini memberikan performa terbaik di antara ketiganya.
+  * MSE train jauh lebih rendah (32035.624644), menunjukkan model mampu mempelajari pola dengan baik.
+  * MSE test (132791.787976) juga relatif lebih rendah dibanding model lain.
+  Meskipun terdapat gap antara train dan test, nilainya masih dalam batas wajar untuk algoritma ensemble yang memang cenderung fit lebih baik pada data latih. Secara keseluruhan, model    ini memberikan performa terbaik di antara ketiganya.
 
 3. AdaBoost (Boosting)
-* MSE train (226245.065429) dan test (235836.559536) cukup tinggi, menandakan model tidak optimal dalam belajar pola pada data.
-* Gap kecil antara train dan test menunjukkan model tidak overfitting, namun hasilnya tetap kurang akurat.
-AdaBoost cenderung kurang kuat pada dataset tanpa noise rendah atau tanpa tuning parameter lebih lanjut.
+  * MSE train (226245.065429) dan test (235836.559536) cukup tinggi, menandakan model tidak optimal dalam belajar pola pada data.
+  * Gap kecil antara train dan test menunjukkan model tidak *overfitting*, namun hasilnya tetap kurang akurat.
+  AdaBoost cenderung kurang kuat pada dataset tanpa *noise* rendah atau tanpa tuning parameter lebih lanjut.
 
 ## **Hasil Prediksi**
-| Index | y_true | prediksi_KNN | prediksi_RF | prediksi_Boosting |
+| Index | y_true | prediksi_KNN  | prediksi_RF  | prediksi_Boosting  |
 |-------|--------|---------------|--------------|--------------------|
 | 213   | 144990 | 139155.0      | 115338.7     | 110793.4           |
 | 331   | 20999  | 37804.6       | 24054.9      | 37464.9            |
@@ -230,28 +225,27 @@ Tabel di atas menampilkan perbandingan antara nilai harga asli (y_true) dengan h
 
 ### 1. KNN (K-Nearest Neighbors)
 KNN menghasilkan prediksi yang cenderung lebih moderat dan berada cukup dekat dengan nilai aktual pada beberapa titik data, terutama pada:
-* Index 213: prediksi 139.155 vs 144.990 (cukup dekat)
-* Index 535: prediksi 91.124 vs 86.990 (dekat)
-Namun pada kasus harga rendah seperti index 331 (20.999), KNN overestimate cukup jauh (hasil 37.804), menunjukkan kelemahan KNN dalam mempelajari pola harga rendah.
+* Index 213: prediksi 139155.0 dan aktual 144990 (cukup dekat)
+* Index 535: prediksi 91124.0 dengan aktual 86990 (dekat)
+Namun, pada data dengan harga relatif rendah seperti pada indeks 331 (harga aktual 20.999), model KNN menghasilkan prediksi yang jauh lebih tinggi, yaitu 37.804. Hal ini menunjukkan bahwa KNN cenderung memprediksi harga lebih tinggi dari nilai sebenarnya pada segmen harga rendah, yang mengindikasikan keterbatasan model dalam menangkap pola harga pada rentang nilai tersebut.
 
-### 2. Random Forest
-RF umumnya menghasilkan nilai prediksi yang lebih dekat ke nilai aktual dibanding dua model lainnya.
-Contoh kedekatan prediksi:
-* Index 331: 24.054 vs 20.999 → sangat dekat
-* Index 506: 43.380 vs 47.490 → dekat
-* Index 280: 28.269 vs 24.990 → dekat
-  
-Namun ada beberapa titik di mana RF memberikan deviasi besar, terutama pada harga menengah–tinggi:
-* Index 107: prediksi jauh lebih tinggi dibanding nilai aktual (overestimate)
-Tetap saja, secara keseluruhan RF menunjukkan performa paling stabil.
+### 2. Random Forest (RF)
+RF umumnya menghasilkan nilai prediksi yang lebih dekat ke nilai aktual dibanding dua model lainnya. Contoh kedekatan prediksi:
+* Index 331: 24054.9 vs 20999 → Sangat Dekat
+* Index 506: 43380.2 vs 47490 → Dekat
+* Index 280: 28269.2 vs 24990 → Dekat
+
+Namun, terdapat beberapa titik di mana model Random Forest menghasilkan selisih prediksi yang cukup besar, terutama pada rentang harga menengah hingga tinggi.
+* Index 107: nilai prediksi jauh lebih tinggi dibandingkan harga aktual.
+Meskipun demikian, secara keseluruhan Random Forest tetap menunjukkan performa yang paling stabil dibandingkan model lainnya.
 
 ### 3. Boosting (AdaBoost)
 Boosting menghasilkan prediksi yang sering kali lebih tinggi dari nilai aktual (overestimate), terutama:
-* Index 331 (harga rendah) → prediksi 37.464 (lebih tinggi)
-* Index 107 (harga 85.990) → prediksi 133.228 (melenceng cukup jauh)
+* Index 331 (Harga 20999) → prediksi 37464.9 (Lebih Tinggi)
+* Index 107 (Harga 85990) → prediksi 133228.4 (Melenceng Jauh)
 
 Di beberapa titik model cukup akurat:
-* Index 506: 39.569 vs 47.490 (relatif dekat)
+* Index 506: Harga prediksi 39.569 dengan harga prediksi yaitu 47490 (Relatif Dekat)
 Namun secara umum, Boosting yang kamu gunakan tampak kurang mampu menangkap pola kompleks harga laptop tanpa tuning lebih lanjut.
 
 ### Kesimpulan dari Tabel Prediksi
@@ -259,21 +253,20 @@ Berdasarkan perbandingan nilai aktual dan hasil prediksi:
 **Random Forest** memberikan prediksi paling mendekati nilai aktual di sebagian besar data. Hal ini sejalan dengan hasil MSE sebelumnya, di mana Random Forest menghasilkan MSE terendah pada data uji. KNN memberikan performa yang cukup, namun hasilnya kurang akurat pada data dengan harga yang sangat rendah atau sangat tinggi. Sementara itu, Boosting menunjukkan selisih prediksi yang paling besar dan cenderung memprediksi harga lebih tinggi dari nilai sebenarnya, sehingga kurang cocok digunakan pada dataset ini.
 
 ## **Kesimpulan Akhir**
-* Berdasarkan keseluruhan proses analisis dan pemodelan, proyek ini berhasil menghasilkan model prediktif yang dapat digunakan untuk memperkirakan harga wajar laptop berdasarkan spesifikasi teknisnya. Dari tiga algoritma yang diuji, Random Forest menunjukkan performa terbaik dengan nilai MSE terendah pada data uji. Hal ini menunjukkan bahwa model mampu memberikan prediksi yang lebih mendekati harga aktual dibandingkan dua model lainnya.
+Berdasarkan keseluruhan proses analisis dan pemodelan, proyek ini berhasil menghasilkan model prediktif yang dapat digunakan untuk memperkirakan harga wajar laptop berdasarkan spesifikasi teknisnya. Dari tiga algoritma yang diuji, Random Forest menunjukkan performa terbaik dengan nilai MSE terendah pada data uji. Hal ini menunjukkan bahwa model mampu memberikan prediksi yang lebih mendekati harga aktual dibandingkan dua model lainnya.
 
-Hasil ini sekaligus menjawab Problem Statement yang diajukan di awal.
-Melalui analisis fitur dan hasil pemodelan, faktor-faktor seperti processor tier, RAM, GPU type, dan brand terbukti memiliki kontribusi yang signifikan dalam memengaruhi harga laptop. Selain itu, model prediktif yang dibangun telah mampu memberikan estimasi harga yang cukup akurat sehingga dapat dimanfaatkan sebagai alat pendukung keputusan dalam proses pengadaan.
+Hasil ini sekaligus menjawab Problem Statement yang diajukan di awal. Melalui analisis fitur dan hasil pemodelan, faktor-faktor seperti processor tier, RAM, GPU type, dan brand terbukti memiliki kontribusi yang signifikan dalam memengaruhi harga laptop. Selain itu, model prediktif yang dibangun telah mampu memberikan estimasi harga yang cukup akurat sehingga dapat dimanfaatkan sebagai alat pendukung keputusan dalam proses pengadaan.
 
-Dengan demikian, proyek ini berhasil mencapai tujuan (Goals), yaitu:
+**Dengan demikian, proyek ini berhasil mencapai tujuan (Goals), yaitu:**
 1. Memahami hubungan antara spesifikasi teknis laptop dan harga jualnya.
 2. Menentukan model regresi terbaik untuk memprediksi harga wajar laptop dalam konteks pengadaan.
 
-* Apakah proyek ini berhasil menjadi solusi?
-Ya, proyek ini berhasil memberikan solusi yang relevan dan aplikatif.
+**Apakah proyek ini berhasil menjadi solusi?**
+Jawabannya adalah proyek ini berhasil memberikan solusi yang relevan dan aplikatif.
 Model prediksi harga yang dihasilkan dapat membantu tim Pengadaan Barang dan Jasa dalam:
 1. Menetapkan benchmark harga wajar sebelum proses pembelian.
-2. Mengurangi risiko overbudget maupun underbudget.
+2. Mengurangi risiko *overbudget* maupun *underbudget*.
 3. Mendukung proses negosiasi harga dengan vendor menggunakan data objektif.
-4. Memahami spesifikasi mana yang paling memengaruhi kenaikan harga, sehingga dapat memilih laptop yang optimal dan cost-effective.
+4. Memahami spesifikasi mana yang paling memengaruhi kenaikan harga, sehingga dapat memilih laptop yang optimal dan *cost-effective*.
 
 Secara keseluruhan, proyek ini tidak hanya menjawab kebutuhan analitis, tetapi juga memberikan dampak bagi proses pengadaan melalui pemanfaatan model Machine Learning yang efektif dan dapat diandalkan.
