@@ -117,12 +117,12 @@ Fitur numerik distandarisasi menggunakan StandardScaler agar semua fitur memilik
 K-Nearest Neighbors (KNN) adalah algoritma berbasis instance-based learning atau lazy learner. Artinya, model tidak membangun fungsi atau aturan khusus saat pelatihan, tetapi menyimpan seluruh data latih dan baru melakukan perhitungan ketika diminta melakukan prediksi.
 
 * Proses kerja KNN dalam regresi adalah sebagai berikut:
-  1. Ketika model menerima satu data baru yang ingin diprediksi, ia akan menghitung jarak antara data tersebut dengan seluruh data latih.
-  2. Jarak yang digunakan biasanya Euclidean Distance (karena p=2, default).
-  3. Setelah semua jarak dihitung, model memilih k tetangga terdekat sesuai nilai n_neighbors.
-  4. Nilai target (harga laptop) diprediksi dengan menghitung rata-rata dari nilai target milik tetangga-tetangga terdekat tersebut.
-  5. Semakin kecil jaraknya, semakin besar pengaruh datapoint tersebut terhadap prediksi.
-  Karena KNN melihat kedekatan data (mirip atau tidak mirip), scaling data sangat penting agar fitur dengan rentang besar tidak mendominasi jarak.
+1. Ketika model menerima satu data baru yang ingin diprediksi, ia akan menghitung jarak antara data tersebut dengan seluruh data latih.
+2. Jarak yang digunakan biasanya Euclidean Distance (karena p=2, default).
+3. Setelah semua jarak dihitung, model memilih k tetangga terdekat sesuai nilai n_neighbors.
+4. Nilai target (harga laptop) diprediksi dengan menghitung rata-rata dari nilai target milik tetangga-tetangga terdekat tersebut.
+5. Semakin kecil jaraknya, semakin besar pengaruh datapoint tersebut terhadap prediksi.
+Karena KNN melihat kedekatan data (mirip atau tidak mirip), scaling data sangat penting agar fitur dengan rentang besar tidak mendominasi jarak.
 
 * Parameter Model
   `knn = KNeighborsRegressor(n_neighbors=10)`
@@ -130,54 +130,54 @@ K-Nearest Neighbors (KNN) adalah algoritma berbasis instance-based learning atau
   Penjelasan parameter:
   **n_neighbors = 10**
   Menentukan jumlah tetangga terdekat yang digunakan untuk melakukan prediksi. Dengan nilai 10, prediksi dilakukan dengan menghitung rata-rata harga dari 10 laptop yang paling mirip.
-  Nilai k yang lebih besar membuat model lebih halus (less variance), tetapi terlalu besar dapat mengaburkan pola lokal.
+  Nilai k yang lebih besar membuat model lebih halus (less variance), tetapi terlalu besar dapat melemahkan penangkapan pola spesifik pada data.
 
 ### Model 2 - Random Forest Regressor
 Random Forest adalah algoritma ensemble berbasis bagging yang menggabungkan banyak Decision Tree untuk menghasilkan prediksi yang lebih stabil dan akurat. 
 
 * Proses kerja RF dalam regresi adalah sebagai berikut:
-  1. Model membangun banyak pohon keputusan (Decision Trees).
-  2. Setiap pohon dilatih pada subset data yang berbeda yang diambil secara acak (bootstrap sampling).
-  3. Selain bootstrap, setiap pohon juga menggunakan subset fitur acak saat membangun setiap node.
-  4. Pada saat prediksi, masing-masing pohon memberikan prediksinya, kemudian hasil akhirnya adalah rata-rata prediksi seluruh pohon (untuk regresi).
-  5. Proses ini membuat Random Forest tahan terhadap overfitting, lebih stabil, dan mampu menangkap pola non-linear.
+1. Model membangun banyak pohon keputusan (Decision Trees).
+2. Setiap pohon dilatih pada subset data yang berbeda yang diambil secara acak (bootstrap sampling).
+3. Selain bootstrap, setiap pohon juga menggunakan subset fitur acak saat membangun setiap node.
+4. Pada saat prediksi, masing-masing pohon memberikan prediksinya, kemudian hasil akhirnya adalah rata-rata prediksi seluruh pohon (untuk regresi).
+5. Proses ini membuat Random Forest tahan terhadap overfitting, lebih stabil, dan mampu menangkap pola non-linear.
 
 * Parameter Model
   `RF = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1)`
 
   Penjelasan parameter:
-  1. n_estimators = 50
+  * n_estimators = 50
   Jumlah pohon dalam hutan. Semakin banyak pohon, semakin stabil hasilnya. Dalam kasus ini digunakan 50 pohon—cukup untuk mendapatkan hasil yang baik tanpa waktu komputasi yang terlalu    besar.
 
-  2. max_depth = 16
+  * max_depth = 16
   Parameter ini membatasi kedalaman maksimum setiap decision tree dalam Random Forest. Pembatasan ini membantu model agar tidak terlalu kompleks dan tidak terlalu menyesuaikan diri
   dengan data latih, sehingga risiko overfitting dapat dikurangi.
 
-  3. random_state = 55
+  * random_state = 55
   Nilai random_state = 55 dipilih sebagai seed acak untuk mengontrol proses randomisasi pada Random Forest. Digunakan agar seluruh proses pelatihan model (seperti pemilihan sampel dan     fitur) dapat menghasilkan hasil yang sama setiap kali kode dijalankan.
 
-  4. n_jobs = -1
+  * n_jobs = -1
   Digunakan agar proses pelatihan Random Forest memanfaatkan seluruh core CPU, sehingga waktu training menjadi lebih cepat dan efisien.
 
 ### Model 3 - AdaBoost Regressor (Boosting)
 AdaBoost (Adaptive Boosting) adalah algoritma boosting yang bekerja secara sekuensial, di mana setiap model baru dibuat untuk memperbaiki kesalahan dari model sebelumnya.
 
 * Proses kerja RF dalam regresi adalah sebagai berikut:
-  1. Model pertama (weak learner) dilatih menggunakan seluruh data.
-  2. Setelah model pertama selesai, datapoint yang diprediksi salah akan diberikan bobot lebih besar, sehingga model berikutnya fokus memperbaiki kesalahan tersebut.
-  3. Model kedua dilatih dengan mempertimbangkan bobot baru tersebut.
-  4. Proses ini terus diulang untuk sejumlah iterasi (sesuai default atau parameter).
-  5. Prediksi akhir merupakan kombinasi berbobot dari seluruh weak learners yang dibangun.
-  Karena sifatnya sekuensial, boosting sangat baik dalam meningkatkan akurasi, tetapi lebih sensitif terhadap noise.
+1. Model pertama (weak learner) dilatih menggunakan seluruh data.
+2. Setelah model pertama selesai, datapoint yang diprediksi salah akan diberikan bobot lebih besar, sehingga model berikutnya fokus memperbaiki kesalahan tersebut.
+3. Model kedua dilatih dengan mempertimbangkan bobot baru tersebut.
+4. Proses ini terus diulang untuk sejumlah iterasi (sesuai default atau parameter).
+5. Prediksi akhir merupakan kombinasi berbobot dari seluruh weak learners yang dibangun.
+Karena sifatnya sekuensial, boosting sangat baik dalam meningkatkan akurasi, tetapi lebih sensitif terhadap noise.
 
 * Parameter Model
   `boosting = AdaBoostRegressor(learning_rate=0.05, random_state=55)`
 
   Penjelasan Parameter:
-  1. learning_rate = 0.05
+  * learning_rate = 0.05
   Mengatur kontribusi setiap weak learner (pohon kecil) terhadap model akhir. Nilai rendah (0.05) membuat setiap model memberi kontribusi kecil sehingga proses boosting lebih halus dan    mengurangi risiko overfitting.
 
-  2. random_state = 55
+  * random_state = 55
   Digunakan untuk mengontrol proses randomisasi pada AdaBoost agar hasil pelatihan model tetap konsisten dan dapat diulang dengan hasil yang sama setiap kali kode dijalankan.
 
 ## **Evaluation**
@@ -192,19 +192,19 @@ Hasil evaluasi model berdasarkan nilai Mean Squared Error (MSE) ditunjukkan pada
 | Boosting    | 226245.065429        | 235836.559536        |
 
 ### Interpretasi Hasil MSE
-1. K-Nearest Neighbors (KNN)
-  * MSE train: 229552.334894	
-  * MSE test: 210297.871642
+* Algoritma K-Nearest Neighbors (KNN)
+  1. MSE train: 229552.334894	
+  2. MSE test: 210297.871642
   Selisih train–test tidak terlalu besar, menandakan model relatif stabil. Namun, nilai MSE yang tinggi menunjukkan bahwa akurasi model kurang baik, kemungkinan karena KNN sensitif        terhadap skala data dan tidak mampu menangkap pola kompleks dalam dataset laptop.
 
-2. Random Forest (RF)
-  * MSE train jauh lebih rendah (32035.624644), menunjukkan model mampu mempelajari pola dengan baik.
-  * MSE test (132791.787976) juga relatif lebih rendah dibanding model lain.
+* Algoritma Random Forest (RF)
+  1. MSE train jauh lebih rendah (32035.624644), menunjukkan model mampu mempelajari pola dengan baik.
+  2. MSE test (132791.787976) juga relatif lebih rendah dibanding model lain.
   Meskipun terdapat gap antara train dan test, nilainya masih dalam batas wajar untuk algoritma ensemble yang memang cenderung fit lebih baik pada data latih. Secara keseluruhan, model    ini memberikan performa terbaik di antara ketiganya.
 
-3. AdaBoost (Boosting)
-  * MSE train (226245.065429) dan test (235836.559536) cukup tinggi, menandakan model tidak optimal dalam belajar pola pada data.
-  * Gap kecil antara train dan test menunjukkan model tidak *overfitting*, namun hasilnya tetap kurang akurat.
+* Algoritma AdaBoost (Boosting)
+  1. MSE train (226245.065429) dan test (235836.559536) cukup tinggi, menandakan model tidak optimal dalam belajar pola pada data.
+  2. Gap kecil antara train dan test menunjukkan model tidak *overfitting*, namun hasilnya tetap kurang akurat.
   AdaBoost cenderung kurang kuat pada dataset tanpa *noise* rendah atau tanpa tuning parameter lebih lanjut.
 
 ## **Hasil Prediksi**
@@ -223,13 +223,13 @@ Hasil evaluasi model berdasarkan nilai Mean Squared Error (MSE) ditunjukkan pada
 
 Tabel di atas menampilkan perbandingan antara nilai harga asli (y_true) dengan hasil prediksi dari tiga model: KNN, Random Forest, dan Boosting. Dari data ini, dapat dilakukan analisis performa masing-masing model berdasarkan kedekatan prediksi terhadap nilai aktual.
 
-### 1. KNN (K-Nearest Neighbors)
+### 1. Algoritma KNN (K-Nearest Neighbors)
 KNN menghasilkan prediksi yang cenderung lebih moderat dan berada cukup dekat dengan nilai aktual pada beberapa titik data, terutama pada:
 * Index 213: prediksi 139155.0 dan aktual 144990 (cukup dekat)
 * Index 535: prediksi 91124.0 dengan aktual 86990 (dekat)
 Namun, pada data dengan harga relatif rendah seperti pada indeks 331 (harga aktual 20.999), model KNN menghasilkan prediksi yang jauh lebih tinggi, yaitu 37.804. Hal ini menunjukkan bahwa KNN cenderung memprediksi harga lebih tinggi dari nilai sebenarnya pada segmen harga rendah, yang mengindikasikan keterbatasan model dalam menangkap pola harga pada rentang nilai tersebut.
 
-### 2. Random Forest (RF)
+### 2. Algoritma Random Forest (RF)
 RF umumnya menghasilkan nilai prediksi yang lebih dekat ke nilai aktual dibanding dua model lainnya. Contoh kedekatan prediksi:
 * Index 331: 24054.9 vs 20999 → Sangat Dekat
 * Index 506: 43380.2 vs 47490 → Dekat
@@ -239,7 +239,7 @@ Namun, terdapat beberapa titik di mana model Random Forest menghasilkan selisih 
 * Index 107: nilai prediksi jauh lebih tinggi dibandingkan harga aktual.
 Meskipun demikian, secara keseluruhan Random Forest tetap menunjukkan performa yang paling stabil dibandingkan model lainnya.
 
-### 3. Boosting (AdaBoost)
+### 3. Algoritma Boosting (AdaBoost)
 Boosting menghasilkan prediksi yang sering kali lebih tinggi dari nilai aktual (overestimate), terutama:
 * Index 331 (Harga 20999) → prediksi 37464.9 (Lebih Tinggi)
 * Index 107 (Harga 85990) → prediksi 133228.4 (Melenceng Jauh)
@@ -262,6 +262,7 @@ Hasil ini sekaligus menjawab Problem Statement yang diajukan di awal. Melalui an
 2. Menentukan model regresi terbaik untuk memprediksi harga wajar laptop dalam konteks pengadaan.
 
 **Apakah proyek ini berhasil menjadi solusi?**
+
 Jawabannya adalah proyek ini berhasil memberikan solusi yang relevan dan aplikatif.
 Model prediksi harga yang dihasilkan dapat membantu tim Pengadaan Barang dan Jasa dalam:
 1. Menetapkan benchmark harga wajar sebelum proses pembelian.
