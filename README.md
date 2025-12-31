@@ -1,9 +1,9 @@
 # Laporan Proyek Machine Learning - Kirana Alyssa Putri
-## Domain Proyek
+## **Domain Proyek**
 **Predictive Analysis untuk Pengadaan Laptop**
 Proyek ini berada dalam domain Predictive Analysis (analisis prediktif), yang berfokus pada kebutuhan strategis tim Pengadaan Barang dan Jasa. Tujuan utamanya adalah membangun model regresi yang mampu memprediksi harga wajar (Price) sebuah laptop berdasarkan spesifikasi teknisnya.
 
-## Latar Belakang
+## **Latar Belakang**
 Menentukan harga wajar laptop dalam proses pengadaan sering menjadi tantangan, karena harga dipengaruhi oleh berbagai variabel spesifikasi, seperti brand, processor tier, kapasitas RAM, dan GPU.
 
 Proyek ini hadir sebagai solusi berbasis data untuk:
@@ -13,7 +13,7 @@ Proyek ini hadir sebagai solusi berbasis data untuk:
 
 Masalah regresi ini diselesaikan dengan membandingkan tiga model Machine Learning: KNN, Random Forest, dan Gradient Boosting, untuk menemukan model dengan Mean Squared Error (MSE) terendah.
 
-## Business Understanding
+## **Business Understanding**
 ### Problem Statements
 1. Bagaimana cara mengidentifikasi faktor spesifikasi teknis (prosesor, RAM, penyimpanan, GPU) yang paling signifikan memengaruhi harga laptop?
 2. Bagaimana membangun model prediktif yang akurat untuk estimasi harga wajar laptop sebagai alat bantu dalam proses pengadaan?
@@ -31,7 +31,7 @@ Random Forest adalah model ensemble yang menggabungkan banyak pohon keputusan. M
 * Gradient Boosting (Boosting)
 Model ini juga termasuk ensemble, namun dibangun secara berurutan. Setiap model berikutnya mencoba memperbaiki kesalahan dari model sebelumnya, sehingga hasil prediksinya cenderung lebih akurat.
 
-## Data Understanding
+## **Data Understanding**
 Pada tahap Data Understanding, fokus utamanya adalah memahami struktur, isi, dan karakteristik dataset sebelum dilakukan proses persiapan data maupun pemodelan. Pengetahuan mendalam terkait data sangat penting agar setiap langkah berikutnya yaitu preprocessing dan modeling dapat dilakukan dengan tepat.
 
 ### Sumber Dataset
@@ -88,12 +88,12 @@ Outlier tidak selalu salah. Pada konteks produk laptop, outlier sering mencermin
 | OS                           | Sistem operasi yang terpasang pada laptop.                                       |
 | Year of warranty             | Lama garansi yang diberikan, umumnya dalam tahun.                                |
 
-## Data Preparation
+## **Data Preparation**
 
 ### Handling Missing Values
 Karena dataset tidak memiliki missing value, tidak diperlukan teknik imputasi. Semua baris dapat dipertahankan.
 
-## Handling Outlier
+### Handling Outlier
 Terdapat beberapa nilai ekstrem (outlier) pada fitur seperti harga, storage, RAM, dan spesifikasi hardware lainnya. Nilai ekstrem ini merupakan variasi alami dari laptop dengan spesifikasi berbeda, sehingga tetap penting untuk prediksi harga.
 
 Sebagai solusi, digunakan winsorization berbasis **IQR (Interquartile Range)**, yaitu menyesuaikan nilai yang berada di bawah atau di atas batas IQR dengan nilai ambang batasnya. Pendekatan ini menjaga informasi penting dalam data, sekaligus mengurangi pengaruh outlier ekstrem terhadap model.
@@ -111,7 +111,7 @@ Fitur numerik distandarisasi menggunakan StandardScaler agar semua fitur memilik
 * Tujuan: mencegah fitur dengan rentang nilai besar (misal RAM atau Storage) mendominasi proses pembelajaran model.
 * Manfaat: model menjadi lebih stabil dan prediksi lebih akurat.
 
-## Model Development
+## **Model Development**
 ### Model 1 – K-Nearest Neighbors (KNN) Regressor
 K-Nearest Neighbors (KNN) adalah algoritma berbasis instance-based learning atau lazy learner. Artinya, model tidak membangun fungsi atau aturan khusus saat pelatihan, tetapi menyimpan seluruh data latih dan baru melakukan perhitungan ketika diminta melakukan prediksi.
 
@@ -183,7 +183,7 @@ Nilai rendah (0.05) membuat setiap model memberi kontribusi kecil sehingga prose
 2. random_state = 55
 Untuk konsistensi hasil.
 
-## Evaluation
+## **Evaluation**
 Metrik yang digunakan: Mean Squared Error (MSE). MSE mengukur rata-rata kuadrat kesalahan prediksi, memberi penalti besar pada outlier. Dalam pengadaan, prediksi yang terlalu meleset bisa menyebabkan kegagalan tender, sehingga MSE sangat relevan.
 
 ### Hasil MSE terhadap Algoritma
@@ -212,7 +212,7 @@ Secara keseluruhan, model ini memberikan performa terbaik di antara ketiganya.
 * Gap kecil antara train dan test menunjukkan model tidak overfitting, namun hasilnya tetap kurang akurat.
 AdaBoost cenderung kurang kuat pada dataset tanpa noise rendah atau tanpa tuning parameter lebih lanjut.
 
-## Hasil Prediksi
+## **Hasil Prediksi**
 | Index | y_true | prediksi_KNN | prediksi_RF | prediksi_Boosting |
 |-------|--------|---------------|--------------|--------------------|
 | 213   | 144990 | 139155.0      | 115338.7     | 110793.4           |
@@ -258,7 +258,7 @@ Namun secara umum, Boosting yang kamu gunakan tampak kurang mampu menangkap pola
 Berdasarkan perbandingan nilai aktual dan hasil prediksi:
 **Random Forest** memberikan prediksi paling mendekati nilai aktual di sebagian besar data. Hal ini sejalan dengan hasil MSE sebelumnya, di mana Random Forest menghasilkan MSE terendah pada data uji. KNN memberikan performa yang cukup, namun hasilnya kurang akurat pada data dengan harga yang sangat rendah atau sangat tinggi. Sementara itu, Boosting menunjukkan selisih prediksi yang paling besar dan cenderung memprediksi harga lebih tinggi dari nilai sebenarnya, sehingga kurang cocok digunakan pada dataset ini.
 
-## Kesimpulan Akhir
+## **Kesimpulan Akhir**
 * Berdasarkan keseluruhan proses analisis dan pemodelan, proyek ini berhasil menghasilkan model prediktif yang dapat digunakan untuk memperkirakan harga wajar laptop berdasarkan spesifikasi teknisnya. Dari tiga algoritma yang diuji, Random Forest menunjukkan performa terbaik dengan nilai MSE terendah pada data uji. Hal ini menunjukkan bahwa model mampu memberikan prediksi yang lebih mendekati harga aktual dibandingkan dua model lainnya.
 
 Hasil ini sekaligus menjawab Problem Statement yang diajukan di awal.
