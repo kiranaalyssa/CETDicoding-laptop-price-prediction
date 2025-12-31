@@ -147,21 +147,21 @@ Random Forest adalah algoritma ensemble berbasis bagging yang menggabungkan bany
 
   Penjelasan parameter:
   * n_estimators = 50
-  
-  Jumlah pohon dalam hutan. Semakin banyak pohon, semakin stabil hasilnya. Dalam kasus ini digunakan 50 pohon, cukup untuk mendapatkan hasil yang baik tanpa waktu komputasi yang terlalu    besar.
+
+    Semakin banyak pohon, semakin stabil hasilnya. Dalam kasus ini digunakan 50 pohon, cukup untuk mendapatkan hasil yang baik tanpa waktu komputasi yang terlalu    besar.
 
   * max_depth = 16
-  
-  Parameter ini membatasi kedalaman maksimum setiap decision tree dalam Random Forest. Pembatasan ini membantu model agar tidak terlalu kompleks dan tidak terlalu menyesuaikan diri
-  dengan data latih, sehingga risiko overfitting dapat dikurangi.
+
+    Parameter ini membatasi kedalaman maksimum setiap decision tree dalam Random Forest. Pembatasan ini membantu model agar tidak terlalu kompleks dan tidak terlalu menyesuaikan diri
+    dengan data latih, sehingga risiko overfitting dapat dikurangi.
 
   * random_state = 55
-  
-  Nilai random_state = 55 dipilih sebagai seed acak untuk mengontrol proses randomisasi pada Random Forest. Digunakan agar seluruh proses pelatihan model (seperti pemilihan sampel dan     fitur) dapat menghasilkan hasil yang sama setiap kali kode dijalankan.
+
+    Nilai random_state = 55 dipilih sebagai *seed* acak untuk mengontrol proses randomisasi pada Random Forest. Digunakan agar seluruh proses pelatihan model (seperti pemilihan sampel       dan fitur) dapat menghasilkan hasil yang sama setiap kali kode dijalankan.
 
   * n_jobs = -1
   
-  Digunakan agar proses pelatihan Random Forest memanfaatkan seluruh core CPU, sehingga waktu training menjadi lebih cepat dan efisien.
+    Digunakan agar proses pelatihan Random Forest memanfaatkan seluruh core CPU, sehingga waktu training menjadi lebih cepat dan efisien.
 
 ### Model 3 - AdaBoost Regressor (Boosting)
 AdaBoost (Adaptive Boosting) adalah algoritma boosting yang bekerja secara sekuensial, di mana setiap model baru dibuat untuk memperbaiki kesalahan dari model sebelumnya.
@@ -180,11 +180,11 @@ Karena sifatnya sekuensial, boosting sangat baik dalam meningkatkan akurasi, tet
   Penjelasan Parameter:
   * learning_rate = 0.05
   
-  Mengatur kontribusi setiap weak learner (pohon kecil) terhadap model akhir. Nilai rendah (0.05) membuat setiap model memberi kontribusi kecil sehingga proses boosting lebih halus dan    mengurangi risiko overfitting.
+    Mengatur kontribusi setiap weak learner (pohon kecil) terhadap model akhir. Nilai rendah (0.05) membuat setiap model memberi kontribusi kecil sehingga proses boosting lebih halus        dan mengurangi risiko overfitting.
 
   * random_state = 55
   
-  Digunakan untuk mengontrol proses randomisasi pada AdaBoost agar hasil pelatihan model tetap konsisten dan dapat diulang dengan hasil yang sama setiap kali kode dijalankan.
+    Digunakan untuk mengontrol proses randomisasi pada AdaBoost agar hasil pelatihan model tetap konsisten dan dapat diulang dengan hasil yang sama setiap kali kode dijalankan.
 
 ## **Evaluation**
 Metrik evaluasi yang digunakan dalam penelitian ini adalah Mean Squared Error (MSE). MSE mengukur rata-rata kuadrat selisih antara nilai aktual dan nilai prediksi, sehingga kesalahan dengan selisih yang besar akan memberikan dampak yang lebih signifikan terhadap nilai evaluasi. Oleh karena itu, MSE bersifat sensitif terhadap prediksi yang meleset jauh dari nilai sebenarnya. Nilai MSE yang semakin kecil menunjukkan bahwa prediksi model semakin mendekati nilai aktual, sehingga kinerja model dapat dikatakan semakin baik.
@@ -199,18 +199,18 @@ Hasil evaluasi model berdasarkan nilai Mean Squared Error (MSE) ditunjukkan pada
 
 ### Interpretasi Hasil MSE
 * Algoritma K-Nearest Neighbors (KNN)
-  1. MSE train: 229552.334894	
-  2. MSE test: 210297.871642
+  1) MSE train: 229552.334894	
+  2) MSE test: 210297.871642
   Selisih train–test tidak terlalu besar, menandakan model relatif stabil. Namun, nilai MSE yang tinggi menunjukkan bahwa akurasi model kurang baik, kemungkinan karena KNN sensitif        terhadap skala data dan tidak mampu menangkap pola kompleks dalam dataset laptop.
 
 * Algoritma Random Forest (RF)
-  1. MSE train jauh lebih rendah (32035.624644), menunjukkan model mampu mempelajari pola dengan baik.
-  2. MSE test (132791.787976) juga relatif lebih rendah dibanding model lain.
+  1) MSE train jauh lebih rendah (32035.624644), menunjukkan model mampu mempelajari pola dengan baik.
+  2) MSE test (132791.787976) juga relatif lebih rendah dibanding model lain.
   Meskipun terdapat gap antara train dan test, nilainya masih dalam batas wajar untuk algoritma ensemble yang memang cenderung fit lebih baik pada data latih. Secara keseluruhan, model    ini memberikan performa terbaik di antara ketiganya.
 
 * Algoritma AdaBoost (Boosting)
-  1. MSE train (226245.065429) dan test (235836.559536) cukup tinggi, menandakan model tidak optimal dalam belajar pola pada data.
-  2. Gap kecil antara train dan test menunjukkan model tidak *overfitting*, namun hasilnya tetap kurang akurat.
+  1) MSE train (226245.065429) dan test (235836.559536) cukup tinggi, menandakan model tidak optimal dalam belajar pola pada data.
+  2) Gap kecil antara train dan test menunjukkan model tidak *overfitting*, namun hasilnya tetap kurang akurat.
   AdaBoost cenderung kurang kuat pada dataset tanpa *noise* rendah atau tanpa tuning parameter lebih lanjut.
 
 ## **Hasil Prediksi**
