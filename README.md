@@ -201,16 +201,19 @@ Hasil evaluasi model berdasarkan nilai Mean Squared Error (MSE) ditunjukkan pada
 * Algoritma K-Nearest Neighbors (KNN)
   1) MSE train: 229552.334894	
   2) MSE test: 210297.871642
+  
   Selisih train–test tidak terlalu besar, menandakan model relatif stabil. Namun, nilai MSE yang tinggi menunjukkan bahwa akurasi model kurang baik, kemungkinan karena KNN sensitif        terhadap skala data dan tidak mampu menangkap pola kompleks dalam dataset laptop.
 
 * Algoritma Random Forest (RF)
   1) MSE train jauh lebih rendah (32035.624644), menunjukkan model mampu mempelajari pola dengan baik.
   2) MSE test (132791.787976) juga relatif lebih rendah dibanding model lain.
+  
   Meskipun terdapat gap antara train dan test, nilainya masih dalam batas wajar untuk algoritma ensemble yang memang cenderung fit lebih baik pada data latih. Secara keseluruhan, model    ini memberikan performa terbaik di antara ketiganya.
 
 * Algoritma AdaBoost (Boosting)
   1) MSE train (226245.065429) dan test (235836.559536) cukup tinggi, menandakan model tidak optimal dalam belajar pola pada data.
   2) Gap kecil antara train dan test menunjukkan model tidak *overfitting*, namun hasilnya tetap kurang akurat.
+  
   AdaBoost cenderung kurang kuat pada dataset tanpa *noise* rendah atau tanpa tuning parameter lebih lanjut.
 
 ## **Hasil Prediksi**
@@ -231,9 +234,9 @@ Tabel di atas menampilkan perbandingan antara nilai harga asli (y_true) dengan h
 
 ### 1. Algoritma KNN (K-Nearest Neighbors)
 KNN menghasilkan prediksi yang cenderung lebih moderat dan berada cukup dekat dengan nilai aktual pada beberapa titik data, terutama pada:
-* Index 213: prediksi 139155.0 dan aktual 144990 (cukup dekat)
-* Index 535: prediksi 91124.0 dengan aktual 86990 (dekat)
-Namun, pada data dengan harga relatif rendah seperti pada indeks 331 (harga aktual 20.999), model KNN menghasilkan prediksi yang jauh lebih tinggi, yaitu 37.804. Hal ini menunjukkan bahwa KNN cenderung memprediksi harga lebih tinggi dari nilai sebenarnya pada segmen harga rendah, yang mengindikasikan keterbatasan model dalam menangkap pola harga pada rentang nilai tersebut.
+* Index 213: prediksi 139155.0 dan aktual 144990 (Cukup Dekat)
+* Index 535: prediksi 91124.0 dengan aktual 86990 (Dekat)
+Namun, pada data dengan harga relatif rendah seperti pada indeks 331 (Harga aktual 20999), model KNN menghasilkan prediksi yang jauh lebih tinggi, yaitu 37804.6. Hal ini menunjukkan bahwa KNN cenderung memprediksi harga lebih tinggi dari nilai sebenarnya pada segmen harga rendah, yang mengindikasikan keterbatasan model dalam menangkap pola harga pada rentang nilai tersebut.
 
 ### 2. Algoritma Random Forest (RF)
 RF umumnya menghasilkan nilai prediksi yang lebih dekat ke nilai aktual dibanding dua model lainnya. Contoh kedekatan prediksi:
@@ -251,7 +254,7 @@ Boosting menghasilkan prediksi yang sering kali lebih tinggi dari nilai aktual (
 * Index 107 (Harga 85990) → prediksi 133228.4 (Melenceng Jauh)
 
 Di beberapa titik model cukup akurat:
-* Index 506: Harga prediksi 39.569 dengan harga prediksi yaitu 47490 (Relatif Dekat)
+* Index 506: Harga prediksi 39569.7 dengan harga prediksi yaitu 47490 (Relatif Dekat)
 Namun secara umum, Boosting yang kamu gunakan tampak kurang mampu menangkap pola kompleks harga laptop tanpa tuning lebih lanjut.
 
 ### Kesimpulan dari Tabel Prediksi
@@ -269,7 +272,7 @@ Hasil ini sekaligus menjawab Problem Statement yang diajukan di awal. Melalui an
 
 **Apakah proyek ini berhasil menjadi solusi?**
 
-Jawabannya adalah proyek ini berhasil memberikan solusi yang relevan dan aplikatif.
+Proyek ini berhasil memberikan solusi yang relevan dan aplikatif.
 Model prediksi harga yang dihasilkan dapat membantu tim Pengadaan Barang dan Jasa dalam:
 1. Menetapkan benchmark harga wajar sebelum proses pembelian.
 2. Mengurangi risiko *overbudget* maupun *underbudget*.
